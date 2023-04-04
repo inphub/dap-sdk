@@ -9,3 +9,5 @@ add_library(${PROJECT_NAME} STATIC ${DAP_APP_CLI_SRCS} ${DAP_APP_CLI_HEADERS} )
 
 target_link_libraries(${PROJECT_NAME} dap_core dap_io dap_cli_server m)
 target_include_directories(${PROJECT_NAME} PUBLIC include/ )
+
+INSTALL(FILES ${DAP_APP_CLI_HEADERS} DESTINATION ${INCDIR})

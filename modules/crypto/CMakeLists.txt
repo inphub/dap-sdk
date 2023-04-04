@@ -24,6 +24,10 @@ file( GLOB CRYPTO_SRCS
       src/ringct20/*.c
 )
 
+file( GLOB CRYPTO_HEADERS_INSTALL
+      include/*.h
+      )
+
 file( GLOB CRYPTO_HEADERS
       src/*.h
       src/rand/*.h
@@ -296,3 +300,6 @@ if(BUILD_CRYPTO_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()
+
+INSTALL(FILES ${CRYPTO_HEADERS_INSTALL} DESTINATION ${INCDIR})
+

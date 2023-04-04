@@ -8,13 +8,11 @@ CMAKE_CMD=cmake
 mkdir -p build.debug
 cd build.debug
 rm -rf *
-$CMAKE_CMD -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE -DCMAKE_BUILD_TYPE=Debug ../
+$CMAKE_CMD -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE -DCMAKE_INSTALL_PREFIX=/opt/dap-sdk -DCMAKE_BUILD_TYPE=Debug ../
 cd ..
-
-exit 0
 
 mkdir -p build.release
 cd build.release
 rm -rf *
-$CMAKE_CMD -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE ../
+$CMAKE_CMD -DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_FILE -DCMAKE_INSTALL_PREFIX=/opt/dap-sdk ../
 cd ..

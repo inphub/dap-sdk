@@ -14,7 +14,7 @@ set(DAP_SDK_SRC_EXT "")
 set(DAP_SDK_HEADERS_EXT "")
 include_directories(include)
 
-option(DAP_SDK_BUILD_STATIC      "Static project build scheme" ON)
+option(DAP_SDK_BUILD_STATIC      "Static project build scheme" OFF)
 option(DAP_SDK_SINGLE_BUILD      "Single project build scheme" ON)
 
 option(DAP_SDK_MODULE_CORE       "DAP SDK Core        module" ON)
@@ -30,7 +30,16 @@ option(DAP_SDK_SUPPORT_LIBMAGIC  "DAP SDK libmagic support" OFF)
 option(DAP_SDK_SUPPORT_SSL       "DAP SDK SSL      support" OFF)
 option(DAP_SDK_SUPPORT_JSON_C    "DAP SDK JSON-C   support" ON)
 
-#
+set(BINDIR ${CMAKE_INSTALL_PREFIX}/bin)
+set(INCDIR ${CMAKE_INSTALL_PREFIX}/include)
+set(CONFIGDIR ${CMAKE_INSTALL_PREFIX}/etc)
+set(SBINDIR ${CMAKE_INSTALL_PREFIX}/sbin)
+set(LIBDIR ${CMAKE_INSTALL_PREFIX}/lib)
+set(RLIBDIR ${CMAKE_INSTALL_PREFIX}/lib)
+set(SHAREDIR ${CMAKE_INSTALL_PREFIX}/share)
+set(CMAKEDIR ${CMAKE_INSTALL_PREFIX}/share/cmake)
+
+
 if(UNIX)
         set(DAP_SDK_SRC_EXT "${DAP_SDK_SRC_EXT};${PROJECT_SOURCE_DIR}/os/unix/sig_unix_handler.c")
         set(DAP_SDK_HEADERS_EXT "${DAP_SDK_HEADERS_EXT};${PROJECT_SOURCE_DIR}/os/unix/sig_unix_handler.h")
@@ -58,6 +67,8 @@ if(DAP_SDK_SUPPORT_SSL)
 else()
     add_definitions("-DDAP_NET_CLIENT_NO_SSL")
 endif()
+
+set(DAP_SDK_PUBLIC_HEADERS "")
 
 # Core, add it always
 if(DAP_SDK_MODULE_CORE)
@@ -109,4 +120,17 @@ if (DAP_SDK_MODULE_NET_SERVER)
 endif()
 
 target_include_directories(${PROJECT_NAME} INTERFACE . include/)
+
+
+INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${LIBDIR})
+INSTALL(FILES ${DAP_SDK_HEADERS} DESTINATION ${INCDIR})
+
+# Cmake install
+file(GLOB CMAKE_FILES cmake/*)
+INSTALL(FILES ${CMAKE_FILES} DESTINATION ${CMAKEDIR} )
+
+
+# 3rd party headers
+file(GLOB 3RDPARTY_HEADERS_UTHASH 3rdparty/uthash/src/*.h)
+INSTALL(FILES ${3RDPARTY_HEADERS_UTHASH} DESTINATION ${INCDIR})
 

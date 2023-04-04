@@ -3,7 +3,7 @@ set(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
 set(CMAKE_C_COMPILER   arm-linux-gnueabi-gcc)
-set(CMAKE_CXX_COMPILER arm-linux-gnueabi-cpp)
+#set(CMAKE_CXX_COMPILER arm-linux-gnueabi-gcc)
 
 # where is the target environment located
 set(CMAKE_FIND_ROOT_PATH /usr/arm-linux-gnueabi/)

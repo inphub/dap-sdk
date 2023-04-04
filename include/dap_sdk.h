@@ -33,6 +33,6 @@ typedef struct dap_vars{
 } dap_vars_t;
 extern dap_vars_t g_dap_vars;
 
-int dap_sdk_init(const char *a_json_args,... );
-int dap_sdk_parse_args( int argc, const char **argv );
-void dap_sdk_deinit();
+extern int dap_sdk_init(const char *a_json_args,... );
+extern int dap_sdk_parse_args( int argc, const char **argv );
+extern void dap_sdk_deinit();

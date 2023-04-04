@@ -49,3 +49,6 @@ if (${BUILD_DAP_IO_TESTS} MATCHES ON)
     add_subdirectory(test)
 endif()
 
+file(GLOB DAP_IO_HEADERS_INSTALL include/*.h)
+
+INSTALL(FILES ${DAP_IO_HEADERS_INSTALL} DESTINATION ${INCDIR})

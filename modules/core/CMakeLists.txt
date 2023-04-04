@@ -14,7 +14,6 @@ file(GLOB CORE_HEADERS
   include/unix/linux/*.h
 )
 
-
 add_library(${PROJECT_NAME} STATIC ${CORE_SRCS} ${CORE_HEADERS})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/uthash/src)
@@ -60,3 +59,5 @@ if(BUILD_DAP_TESTS)
     enable_testing()
     add_subdirectory(test)
 endif()
+
+INSTALL(FILES ${CORE_HEADERS} DESTINATION ${INCDIR})
