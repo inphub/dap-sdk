@@ -44,6 +44,7 @@
 #endif
 
 #include "dap_common.h"
+#include "dap_enc_base64.h"
 #include "dap_string.h"
 #include "dap_strfuncs.h"
 #include "dap_cli_server.h" // for UNIX_SOCKET_FILE

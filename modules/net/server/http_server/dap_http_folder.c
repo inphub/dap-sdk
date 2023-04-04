@@ -37,7 +37,9 @@
 #endif
 
 #include <pthread.h>
+#ifdef DAP_SDK_SUPPORT_LIBMAGIC
 #include <magic.h>
+#endif
 
 #include "dap_common.h"
 #include "dap_events_socket.h"
@@ -48,7 +50,9 @@
 
 typedef struct dap_http_url_proc_folder {
     char local_path[4096];
+#ifdef DAP_SDK_SUPPORT_LIBMAGIC
     magic_t mime_detector;
+#endif
 } dap_http_url_proc_folder_t;
 
 #define URL_PROC_FOLDER(a) ((dap_http_url_proc_folder_t*) (a)->_inhertior )
@@ -62,10 +66,10 @@ typedef struct dap_http_file{
 
 #define DAP_HTTP_FILE(a) ((dap_http_file_t*) (a)->_inheritor )
 
-void dap_http_folder_headers_read( dap_http_client_t *cl_ht, void *arg );
-void dap_http_folder_headers_write( dap_http_client_t *cl_ht, void *arg );
-void dap_http_folder_data_read( dap_http_client_t *cl_ht, void *arg );
-void dap_http_folder_data_write( dap_http_client_t *cl_ht, void *arg );
+static void s_headers_read( dap_http_client_t *cl_ht, void *arg );
+static void s_headers_write( dap_http_client_t *cl_ht, void *arg );
+static void s_data_read( dap_http_client_t *cl_ht, void *arg );
+static void s_data_write( dap_http_client_t *cl_ht, void *arg );
 
 #define LOG_TAG "dap_http_folder"
 
@@ -119,6 +123,7 @@ int dap_http_folder_add( dap_http_t *sh, const char *url_path, const char *local
   dap_http_url_proc_folder_t *up_folder = (dap_http_url_proc_folder_t *)calloc( 1, sizeof(dap_http_url_proc_folder_t) );
   strncpy( up_folder->local_path, local_path, sizeof(up_folder->local_path)-1 );
 
+#if defined(DAP_SDK_SUPPORT_LIBMAGIC)
   up_folder->mime_detector = magic_open( MAGIC_SYMLINK | MAGIC_MIME | MAGIC_PRESERVE_ATIME );
 
   if ( up_folder->mime_detector == NULL) {
@@ -139,15 +144,17 @@ int dap_http_folder_add( dap_http_t *sh, const char *url_path, const char *local
     return -2;
   }
 
+#endif
+
   dap_http_add_proc(  sh, 
                       url_path, 
                       up_folder, 
                       NULL,
                       NULL,
-                      dap_http_folder_headers_read,
-                      dap_http_folder_headers_write,
-                      dap_http_folder_data_read,
-                      dap_http_folder_data_write,
+                      s_headers_read,
+                      s_headers_write,
+                      s_data_read,
+                      s_data_write,
                       NULL );
     return 0;
 }
@@ -157,7 +164,7 @@ int dap_http_folder_add( dap_http_t *sh, const char *url_path, const char *local
  * @param cl_ht HTTP client instance
  * @param arg Not used
  */
-void dap_http_folder_headers_read(dap_http_client_t * cl_ht, void * arg)
+static void s_headers_read(dap_http_client_t * cl_ht, void * arg)
 {
     (void) arg;
     cl_ht->state_write=DAP_HTTP_CLIENT_STATE_START;
@@ -184,7 +191,7 @@ time_t FileTimeToUnixTime( FILETIME ft )
  * @param cl_ht HTTP client instane
  * @param arg Not used
  */
-void dap_http_folder_headers_write( dap_http_client_t *cl_ht, void * arg)
+static void s_headers_write( dap_http_client_t *cl_ht, void * arg)
 {
   (void) arg;
   // Get specific data for folder URL processor
@@ -251,6 +258,7 @@ void dap_http_folder_headers_write( dap_http_client_t *cl_ht, void * arg)
     cl_ht->reply_status_code = Http_Status_OK;
     strncpy( cl_ht->reply_reason_phrase,"OK",sizeof(cl_ht->reply_reason_phrase)-1 );
 
+#ifdef DAP_SDK_SUPPORT_LIBMAGIC
     const char *mime_type = magic_file( up_folder->mime_detector, cl_ht_file->local_path );
     if( mime_type ) {
       strncpy(cl_ht->out_content_type,mime_type,sizeof(cl_ht->out_content_type)-1);
@@ -261,7 +269,8 @@ void dap_http_folder_headers_write( dap_http_client_t *cl_ht, void * arg)
       cl_ht->esocket->flags |= DAP_SOCK_SIGNAL_CLOSE;
       log_it(L_WARNING,"Can't detect MIME type of %s file: %s",cl_ht_file->local_path,magic_error(up_folder->mime_detector));
     }
-  }
+#endif
+    }
 
   return;
 
@@ -279,7 +288,7 @@ err:
  * @param cl_ht HTTP client instance
  * @param arg Pointer to int with return bytes number
  */
-void dap_http_folder_data_read(dap_http_client_t * cl_ht, void * arg)
+static void s_data_read(dap_http_client_t * cl_ht, void * arg)
 {
     int * bytes_return = (int*) arg; // Return number of read bytes
     //Do nothing
@@ -291,7 +300,7 @@ void dap_http_folder_data_read(dap_http_client_t * cl_ht, void * arg)
  * @param cl_ht HTTP client instance
  * @param arg
  */
-void dap_http_folder_data_write(dap_http_client_t * cl_ht, void * arg)
+static void s_data_write(dap_http_client_t * cl_ht, void * arg)
 {
     (void) arg;
     dap_http_file_t * cl_ht_file= DAP_HTTP_FILE(cl_ht);

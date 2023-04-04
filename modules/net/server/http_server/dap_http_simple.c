@@ -40,8 +40,10 @@ See more details here <http://www.gnu.org/licenses/>.
 #include <pthread.h>
 
 #include "utlist.h"
+#ifdef DAP_SDK_SUPPORT_JSON_C
 #include "json-c/json.h"
 #include "json-c/json_object.h"
+#endif
 
 #include "dap_common.h"
 #include "dap_config.h"

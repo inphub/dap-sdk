@@ -2,11 +2,11 @@
 set(CMAKE_SYSTEM_NAME Linux)
 
 # which compilers to use for C and C++
-set(CMAKE_C_COMPILER   /srv/buster/usr/bin/arm-linux-gnueabihf-gcc)
-set(CMAKE_CXX_COMPILER /srv/buster/usr/bin/arm-linux-gnueabihf-g++)
+set(CMAKE_C_COMPILER   arm-linux-gnueabi-gcc)
+set(CMAKE_CXX_COMPILER arm-linux-gnueabi-cpp)
 
 # where is the target environment located
-set(CMAKE_FIND_ROOT_PATH /srv/buster/usr/arm-linux-gnueabi/)
+set(CMAKE_FIND_ROOT_PATH /usr/arm-linux-gnueabi/)
 
 # adjust the default behavior of the FIND_XXX() commands:
 # search programs in the host environment
