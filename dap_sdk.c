@@ -53,14 +53,12 @@ int dap_sdk_init(const char * a_json_args,... )
     //DAP_DEL_Z(l_log_file);
 
     // Инициализируем работу с конфигами
+
     char l_config_dir[MAX_PATH];
     l_config_dir[0] = '\0';
     snprintf(l_config_dir,MAX_PATH, "%s/etc", g_sys_dir_path);
     dap_config_init(l_config_dir);
     g_dap_vars.core.config = g_config = dap_config_open(dap_get_appname());
-    if (!g_config) {
-        return -1;
-    }
 
     log_it( L_DAP, "*** DRS Server version: %s ***", DAP_VERSION );
 
@@ -82,7 +80,7 @@ int dap_sdk_init(const char * a_json_args,... )
     }
 
 
-    g_dap_vars.sys.pid_file_path = dap_config_get_item_str_default( g_config,  "general", "pid_path","/tmp") ;
+    g_dap_vars.sys.pid_file_path = dap_config_get_item_str_default( g_config,  "general", "pid_path","/tmp/dap_app.pid") ;
 
     g_dap_vars.debug_mode = dap_config_get_item_bool_default( g_config,"general","debug_mode", false );
     //  bDebugMode = true;//dap_config_get_item_bool_default( g_config,"general","debug_mode", false );
@@ -119,8 +117,8 @@ int dap_sdk_init(const char * a_json_args,... )
             l_listen_port = dap_config_get_item_uint16_default( g_config, "cli", "listen_port",0);
 
         if ( dap_cli_server_init( g_dap_vars.io.cli.debug_more,
-                             l_listen_port ? dap_config_get_item_str(g_config, "cli", "listen_address")
-                                           : dap_config_get_item_str( g_config, "cli", "listen_unix_socket_path"),
+                             l_listen_port ? dap_config_get_item_str_default(g_config, "cli", "listen_address","")
+                                           : dap_config_get_item_str_default(g_config, "cli", "listen_unix_socket_path", "/tmp"),
                              l_listen_port, dap_config_get_item_str( g_config, "cli", "listen_unix_socket_permissions")
                             ) ) {
             log_it( L_CRITICAL, "Can't init CLI server" );
@@ -145,8 +143,9 @@ int dap_sdk_init(const char * a_json_args,... )
         int32_t l_port = dap_config_get_item_int32(g_config, "server", "listen_port_tcp");
 
         if( l_port > 0 ) {
-            g_dap_vars.io.server.tcp = dap_server_new( (dap_config_get_item_str(g_config, "server", "listen_address")),
-                                      (uint16_t) l_port, SERVER_TCP, NULL );
+            g_dap_vars.io.server.tcp = dap_server_new( (dap_config_get_item_str_default(g_config,
+                                                                                                "server", "listen_address", "0.0.0.0")),
+                                                        (uint16_t) l_port, SERVER_TCP, NULL );
         } else
             log_it( L_WARNING, "Server is enabled but no port is defined" );
 

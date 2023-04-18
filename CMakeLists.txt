@@ -47,12 +47,12 @@ if(UNIX)
 endif()
 
 if(DAP_SDK_SINGLE_BUILD)
-        include(cmake/OS_Detection.cmake)
+        include(share/cmake/OS_Detection.cmake)
         # Перечисление модулей DAP SDK которые нам нужны
         add_definitions("-DDAP_VERSION=\"${DAP_SDK_NATIVE_VERSION}\"")
 endif()
 
-if(DAP_SDK_BUILD_STATIC)
+if(DAP_SDK_BUILD_STATIC OR BUILD_STATIC)
         message("Build static library ${PROJECT_NAME}")
         add_library(${PROJECT_NAME} STATIC ${DAP_SDK_SRCS} ${DAP_SDK_SRC_EXT} ${DAP_SDK_HEADERS} ${DAP_SDK_HEADERS_EXT})
 else()
