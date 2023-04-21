@@ -16,6 +16,10 @@ typedef uint64_t dap_time_t;
 // time in nanoseconds
 typedef uint64_t dap_nanotime_t;
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 // Create gdb time from second
 dap_nanotime_t dap_nanotime_from_sec(uint32_t a_time);
 // Get seconds from gdb time
@@ -53,3 +57,6 @@ int timespec_diff(struct timespec *a_start, struct timespec *a_stop, struct time
 
 dap_time_t dap_time_from_str_simplified(const char *a_time_str);
 
+#ifdef __cplusplus
+}
+#endif

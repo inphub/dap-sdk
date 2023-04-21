@@ -32,7 +32,14 @@ typedef struct dap_vars{
     } crypto;
 } dap_vars_t;
 extern dap_vars_t g_dap_vars;
+#ifdef __cplusplus
+extern "C"{
+#endif
+ int dap_sdk_init(const char *a_json_args,... );
+ int dap_sdk_parse_args( int argc, const char **argv );
+ int dap_sdk_main_loop_wait();
+ void dap_sdk_deinit();
 
-extern int dap_sdk_init(const char *a_json_args,... );
-extern int dap_sdk_parse_args( int argc, const char **argv );
-extern void dap_sdk_deinit();
+#ifdef __cplusplus
+}
+#endif

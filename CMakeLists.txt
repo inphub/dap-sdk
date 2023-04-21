@@ -16,6 +16,7 @@ include_directories(include)
 
 option(DAP_SDK_BUILD_STATIC      "Static project build scheme" OFF)
 option(DAP_SDK_SINGLE_BUILD      "Single project build scheme" ON)
+option(DAP_SDK_DO_TESTS          "Build and run tests" OFF)
 
 option(DAP_SDK_MODULE_CORE       "DAP SDK Core        module" ON)
 option(DAP_SDK_MODULE_CRYPTO     "DAP SDK Crypto      module" ON)
@@ -121,6 +122,10 @@ endif()
 
 target_include_directories(${PROJECT_NAME} INTERFACE . include/)
 
+# Build and run tests
+if(DAP_SDK_DO_TESTS)
+add_subdirectory(tests)
+endif()
 
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ${LIBDIR})
 INSTALL(FILES ${DAP_SDK_HEADERS} DESTINATION ${INCDIR})

@@ -101,7 +101,7 @@ int dap_sdk_init(const char * a_json_args,... )
     g_dap_vars.io.server.enabled = dap_config_get_item_bool_default( g_config, "server", "enabled", false );
 
     if ( g_dap_vars.io.server.enabled && dap_server_init() != 0 ) {
-        log_it( L_CRITICAL, "Can't init socket server module" );
+        log_it( L_CRITICAL, "Can't init socket server" );
         return -4;
     }
 
@@ -202,6 +202,16 @@ int dap_sdk_parse_args( int argc, const char **argv )
 
     return 0;
 }
+
+/**
+ * @brief dap_sdk_main_loop_wait
+ * @return
+ */
+int dap_sdk_main_loop_wait()
+{
+
+}
+
 
 /**
  * @brief exit_if_server_already_running
