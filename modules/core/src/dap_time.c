@@ -6,10 +6,10 @@
 #include <string.h>
 #include <time.h>
 #include "dap_common.h"
-#include "dap_time.h"
 #include "dap_strfuncs.h"
+#include "dap_time.h"
 
-#define LOG_TAG "dap_common"
+#define LOG_TAG "dap_time"
 
 #ifdef _WIN32
 
@@ -71,14 +71,14 @@ dap_time_t dap_time_now(void)
  * @brief dap_chain_time_now Get current time in nanoseconds since January 1, 1970 (UTC)
  * @return Returns current UTC time in nanoseconds.
  */
-dap_nanotime_t dap_nanotime_now(void)
+/*dap_nanotime_t dap_nanotime_now()
 {
     dap_nanotime_t l_time_nsec;
     struct timespec cur_time;
     clock_gettime(CLOCK_REALTIME, &cur_time);
     l_time_nsec = ((dap_nanotime_t)cur_time.tv_sec << 32) + cur_time.tv_nsec;
     return l_time_nsec;
-}
+}*/
 
 /**
  * dap_usleep:

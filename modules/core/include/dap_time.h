@@ -11,14 +11,16 @@
 // Seconds per day
 #define DAP_SEC_PER_DAY 86400
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 // time in seconds
 typedef uint64_t dap_time_t;
 // time in nanoseconds
 typedef uint64_t dap_nanotime_t;
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+
 
 // Create gdb time from second
 dap_nanotime_t dap_nanotime_from_sec(uint32_t a_time);
@@ -34,8 +36,14 @@ dap_time_t dap_time_now(void);
  * @brief dap_clock_gettime Get current time in nanoseconds since January 1, 1970 (UTC)
  * @return Returns current UTC time in nanoseconds.
  */
-dap_nanotime_t dap_nanotime_now(void);
-
+static inline dap_nanotime_t dap_nanotime_now()
+{
+    dap_nanotime_t l_time_nsec;
+    struct timespec cur_time;
+    clock_gettime(CLOCK_REALTIME, &cur_time);
+    l_time_nsec = ((dap_nanotime_t)cur_time.tv_sec << 32) + cur_time.tv_nsec;
+    return l_time_nsec;
+}
 
 // crossplatform usleep
 void dap_usleep(dap_time_t a_microseconds);

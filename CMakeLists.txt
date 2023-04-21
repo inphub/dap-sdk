@@ -71,54 +71,59 @@ endif()
 
 set(DAP_SDK_PUBLIC_HEADERS "")
 
+
 # Core, add it always
 if(DAP_SDK_MODULE_CORE)
     add_subdirectory(modules/core)
-    target_link_libraries(${PROJECT_NAME} dap_core)
+#    target_link_libraries(${PROJECT_NAME} dap_core)
 endif()
 
 if (DAP_SDK_MODULE_CRYPTO)
     # Cryptography
     add_subdirectory(modules/crypto)
-    target_link_libraries(${PROJECT_NAME} dap_crypto)
+#    target_link_libraries(${PROJECT_NAME} dap_core dap_crypto)
 endif()
 
 if (DAP_SDK_MODULE_APP_CLI)
-    add_subdirectory(modules/net/app-cli)
-    add_subdirectory(modules/net/server/cli_server )
-    target_link_libraries(${PROJECT_NAME} dap_app_cli dap_cli_server)
+#    add_subdirectory(modules/net/app-cli)
+#    add_subdirectory(modules/net/server/cli_server )
+#    target_link_libraries(${PROJECT_NAME} dap_core dap_app_cli dap_cli_server)
 endif()
 
 if (DAP_SDK_MODULE_PLUGINS)
     add_subdirectory(plugins)
-    target_link_libraries(${PROJECT_NAME} dap_plugins)
+#    target_link_libraries(${PROJECT_NAME} dap_plugins)
 endif()
 
 # I/O subsystem
 if (DAP_SDK_MODULE_IO)
     add_subdirectory(modules/io)
-    target_link_libraries(${PROJECT_NAME} dap_io)
+#    target_link_libraries(${PROJECT_NAME} dap_core dap_io)
 endif()
 
 # Networking core
 if (DAP_SDK_MODULE_NET_CLIENT OR DAP_SDK_MODULE_NET_SERVER OR DAP_SDK_MODULE_NET_CORE)
     add_subdirectory(modules/net/stream)
-    target_link_libraries(${PROJECT_NAME} libdap-stream)
+#    target_link_libraries(${PROJECT_NAME} dap_core libdap-stream)
 endif()
 
-# Networking client
+#Networking client
 if (DAP_SDK_MODULE_NET_CLIENT)
-    add_subdirectory(modules/net/client)
-    target_link_libraries(${PROJECT_NAME} dap_client)
+#    target_link_libraries(${PROJECT_NAME} dap_core dap_client)
 endif()
 
 # Networking server
 if (DAP_SDK_MODULE_NET_SERVER)
-    #add_subdirectory(3rdparty/json-c)
-    add_subdirectory(modules/net/server)
-    set(DAP_SDK_MODULES_LIBS "${DAP_SDK_MODULES_LIBS} libdap-server")
-    target_link_libraries(${PROJECT_NAME} libdap-server)
+#    set(DAP_SDK_MODULES_LIBS "${DAP_SDK_MODULES_LIBS} libdap-server")
 endif()
+#add_subdirectory(3rdparty/json-c)
+add_subdirectory(modules/net/app-cli)
+#add_subdirectory(modules/net/server/)
+add_subdirectory(modules/net/server/cli_server)
+#add_subdirectory(modules/net/stream)
+#add_subdirectory(modules/net/client)
+target_link_libraries(${PROJECT_NAME} dap_core dap_crypto dap_io dap_cli_server dap_app_cli)# libdap-stream libdap-server dap_http_client dap_client dap_app_cli)
+#add_subdirectory(modules/net/server/cli_server )
 
 target_include_directories(${PROJECT_NAME} INTERFACE . include/)
 
