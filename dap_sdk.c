@@ -209,7 +209,11 @@ int dap_sdk_parse_args( int argc, const char **argv )
  */
 int dap_sdk_main_loop_wait()
 {
-
+    // Вечный цикл, пока приложение работает
+    int l_rc = 0;
+    l_rc = dap_events_wait();
+    log_it( l_rc ? L_CRITICAL : L_NOTICE, "Server loop stopped with return code %d", l_rc );
+    return l_rc;
 }
 
 
