@@ -33,26 +33,26 @@ static void s_exit_if_server_already_running( void );
  */
 int dap_sdk_init(const char * a_json_args,... )
 {
-    UNUSED(a_json_args); // TODO сделать парсинг
-    // Базовый путь к папке приложения
+    UNUSED(a_json_args); // TODO СЃРґРµР»Р°С‚СЊ РїР°СЂСЃРёРЅРі
+    // Р‘Р°Р·РѕРІС‹Р№ РїСѓС‚СЊ Рє РїР°РїРєРµ РїСЂРёР»РѕР¶РµРЅРёСЏ
     g_dap_vars.core.sys_dir = g_sys_dir_path = dap_strdup_printf("/opt/%s", dap_get_appname());
 
-    // Путь к логам, если его нет, то создаёт его
+    // РџСѓС‚СЊ Рє Р»РѕРіР°Рј, РµСЃР»Рё РµРіРѕ РЅРµС‚, С‚Рѕ СЃРѕР·РґР°С‘С‚ РµРіРѕ
     // char *l_log_dir = dap_strdup_printf("%s/var/log", g_sys_dir_path);
     //dap_mkdir_with_parents(l_log_dir);
     //char * l_log_file = dap_strdup_printf( "%s/%s.log", l_log_dir, dap_get_appname());
 
-    // Инициализирует core модуль DAP SDK
+    // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ core РјРѕРґСѓР»СЊ DAP SDK
     if (dap_common_init(dap_get_appname(), NULL, NULL) != 0) {
         printf("Fatal Error: Can't init common functions module");
         return -2;
     }
 
-    // удаляем и обнуляем неиспользуемые переменные
+    // СѓРґР°Р»СЏРµРј Рё РѕР±РЅСѓР»СЏРµРј РЅРµРёСЃРїРѕР»СЊР·СѓРµРјС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
     //DAP_DEL_Z(l_log_dir);
     //DAP_DEL_Z(l_log_file);
 
-    // Инициализируем работу с конфигами
+    // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЂР°Р±РѕС‚Сѓ СЃ РєРѕРЅС„РёРіР°РјРё
 
     char l_config_dir[MAX_PATH];
     l_config_dir[0] = '\0';
@@ -105,7 +105,7 @@ int dap_sdk_init(const char * a_json_args,... )
         return -4;
     }
 
-    // Инициализируем CLI сервер
+    // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј CLI СЃРµСЂРІРµСЂ
 
     bool l_cli_enabled = dap_config_get_item_bool_default( g_config, "cli", "enabled", true );
     if (l_cli_enabled) {
@@ -127,7 +127,7 @@ int dap_sdk_init(const char * a_json_args,... )
     }
 
 
-    // Инициируем обработчики юникс сигналов
+    // РРЅРёС†РёРёСЂСѓРµРј РѕР±СЂР°Р±РѕС‚С‡РёРєРё СЋРЅРёРєСЃ СЃРёРіРЅР°Р»РѕРІ
     if (sig_unix_handler_init(dap_config_get_item_str_default(g_config,
                                                               "general",
                                                               "pid_path",
@@ -164,7 +164,7 @@ void dap_sdk_deinit()
 }
 
 /**
- * @brief Разбирает параметры командной строкиы
+ * @brief Р Р°Р·Р±РёСЂР°РµС‚ РїР°СЂР°РјРµС‚СЂС‹ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРёС‹
  * @param argc
  * @param argv
  */
@@ -209,7 +209,7 @@ int dap_sdk_parse_args( int argc, const char **argv )
  */
 int dap_sdk_main_loop_wait()
 {
-    // Вечный цикл, пока приложение работает
+    // Р’РµС‡РЅС‹Р№ С†РёРєР», РїРѕРєР° РїСЂРёР»РѕР¶РµРЅРёРµ СЂР°Р±РѕС‚Р°РµС‚
     int l_rc = 0;
     l_rc = dap_events_wait();
     log_it( l_rc ? L_CRITICAL : L_NOTICE, "Server loop stopped with return code %d", l_rc );
