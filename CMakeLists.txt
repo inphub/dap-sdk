@@ -49,7 +49,7 @@ endif()
 
 if(DAP_SDK_SINGLE_BUILD)
         include(share/cmake/OS_Detection.cmake)
-        # Перечисление модулей DAP SDK которые нам нужны
+        # РџРµСЂРµС‡РёСЃР»РµРЅРёРµ РјРѕРґСѓР»РµР№ DAP SDK РєРѕС‚РѕСЂС‹Рµ РЅР°Рј РЅСѓР¶РЅС‹
         add_definitions("-DDAP_VERSION=\"${DAP_SDK_NATIVE_VERSION}\"")
 endif()
 
