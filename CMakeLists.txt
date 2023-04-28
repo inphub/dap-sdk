@@ -30,6 +30,8 @@ option(DAP_SDK_MODULE_PLUGINS    "DAP SDK Plugins     module" OFF)
 option(DAP_SDK_SUPPORT_LIBMAGIC  "DAP SDK libmagic support" OFF)
 option(DAP_SDK_SUPPORT_SSL       "DAP SDK SSL      support" OFF)
 option(DAP_SDK_SUPPORT_JSON_C    "DAP SDK JSON-C   support" ON)
+option(DAP_SDK_SUPPORT_SSL       "DAP SDK SSL      support" OFF)
+option(DAP_SDK_LINK_ATOMIC       "DAP SDK atomic   link"    ON)
 
 set(BINDIR ${CMAKE_INSTALL_PREFIX}/bin)
 set(INCDIR ${CMAKE_INSTALL_PREFIX}/include)
