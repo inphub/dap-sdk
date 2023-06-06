@@ -12,6 +12,7 @@
 #include <dap_server.h>
 #include <dap_events.h>
 #include <dap_proc_thread.h>
+#include <dap_time.h>
 #include <dap_strfuncs.h>
 #include <dap_file_utils.h>
 #include <dap_cli_server.h>
@@ -98,6 +99,30 @@ int dap_sdk_init(const char * a_json_args,... )
     dap_proc_thread_init(l_thread_cnt);
     usleep(2000);
 
+
+    // Инициируем обработчики юникс сигналов
+    if (sig_unix_handler_init(dap_config_get_item_str_default(g_config,
+                                                              "general",
+                                                              "pid_path",
+                                                              "/tmp")) != 0) {
+        log_it(L_CRITICAL,"Can't init sig unix handler module");
+        return -12;
+    }
+
+    save_process_pid_in_file( g_dap_vars.sys.pid_file_path);
+
+    g_dap_vars.core.init_ts_nano = dap_nanotime_now();
+    return 0;
+}
+
+/**
+ * @brief dap_sdk_init_proto
+ * @param a_json_args
+ * @return
+ */
+int dap_sdk_init_proto(const char * a_json_args,... )
+{
+    // Инициализируем CLI сервер
     g_dap_vars.io.server.enabled = dap_config_get_item_bool_default( g_config, "server", "enabled", false );
 
     if ( g_dap_vars.io.server.enabled && dap_server_init() != 0 ) {
@@ -105,7 +130,6 @@ int dap_sdk_init(const char * a_json_args,... )
         return -4;
     }
 
-    // Инициализируем CLI сервер
 
     bool l_cli_enabled = dap_config_get_item_bool_default( g_config, "cli", "enabled", true );
     if (l_cli_enabled) {
@@ -126,17 +150,6 @@ int dap_sdk_init(const char * a_json_args,... )
         }
     }
 
-
-    // Инициируем обработчики юникс сигналов
-    if (sig_unix_handler_init(dap_config_get_item_str_default(g_config,
-                                                              "general",
-                                                              "pid_path",
-                                                              "/tmp")) != 0) {
-        log_it(L_CRITICAL,"Can't init sig unix handler module");
-        return -12;
-    }
-
-    save_process_pid_in_file( g_dap_vars.sys.pid_file_path);
 
     if ( g_dap_vars.io.server.enabled ) {
 
@@ -161,6 +174,10 @@ void dap_sdk_deinit()
     dap_interval_timer_deinit();
     dap_common_deinit();
 
+}
+
+void dap_sdk_deinit_proto()
+{
 }
 
 /**
