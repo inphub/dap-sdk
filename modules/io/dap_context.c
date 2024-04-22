@@ -836,7 +836,9 @@ static int s_thread_loop(dap_context_t * a_context)
                  * Socket is ready to write and not going to close
                  */
                 if ( !l_cur->buf_out_size ){                                     /* Check firstly that output buffer is not empty */
-                    dap_events_socket_set_writable_unsafe(l_cur, false);        /* Clear "enable write flag" */
+
+                    if ( !(l_cur->flags & DAP_SOCK_NOT_DROP_WRITE_IF_ZERO) )
+                        dap_events_socket_set_writable_unsafe(l_cur, false);        /* Clear "enable write flag" */
 
                     if ( l_cur->callbacks.write_finished_callback )             /* Optionaly call I/O completion routine */
                         l_cur->callbacks.write_finished_callback(l_cur, l_cur->callbacks.arg, 0);
